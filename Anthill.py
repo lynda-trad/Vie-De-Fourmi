@@ -6,6 +6,7 @@ class Anthill:
         self.array = []
         self.length = len(self.array)
         self.antNumber = 0
+        self.matrice =[]
 
     def getArray(self):
         return self.array
@@ -30,3 +31,29 @@ class Anthill:
         print("Ant number :", self.getAntNumber())
         for r in self.array:
             r.printRoom()
+
+    def printTunnels(self):
+        print(self.matrice)
+
+    def printAnthill(self):
+        self.printRooms()
+        print("Tunnels:")
+        self.printTunnels()
+
+    def addTunnel(self, firstRoom, secondRoom):
+        self.matrice.append((firstRoom, secondRoom))
+
+
+
+
+
+
+
+
+# Tunnels
+# Sommets
+# matriceInit(self):
+#        self.matrice[0] = []
+#        for r in self.array:
+#            self.matrice[0].append(r.getName())
+#        print("Sommets:", self.matrice[0])

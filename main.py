@@ -20,32 +20,31 @@ def getAntNumber(number, line):
 
 
 def fileParsing(anthill):
-    filename = 'fourmiliere_cinq.txt'
-    while not exists(filename):
+    filename = 'fourmiliere_quatre.txt'
+    while not exists("./ressources/" + filename):
         filename = input("Please enter a filename.\n")
 
-    file = open(filename, "r")
+    file = open("./ressources/" + filename, "r")
     lines = file.readlines()
 
     antLine = lines.pop(0)  # line one is always the number of ants
     antNumber = getAntNumber("", antLine)
-    if antNumber == "":   # Error : ant number is not a number
+    if antNumber == "":  # Error : ant number is not a number
         return
     anthill.setAntNumber(int(antNumber))
 
-    # Add Sd and Sv rooms to Anthill Array
+    # Adds Sd and Sv rooms to Anthill Array
     Sd = Room.Room("Sd", int(antNumber))
     Sv = Room.Room("Sv", int(antNumber))
     anthill.addRoom(Sd)
     anthill.addRoom(Sv)
 
     for line in lines:
-        # If line has a '-' it means its a line about tunnels between two rooms
+        # Tunnel
         if '-' in line:
-            tunnelsInit(line)
-        else:  # else its a room initialisation
+            tunnelsInit(line, anthill)
+        else:  # Room
             anthill.addRoom(roomInit(line))
-        print(line)
 
 
 def getRoomCapacity(capacity, line):
@@ -75,9 +74,33 @@ def roomInit(line):
     return r
 
 
-def tunnelsInit(line):
+def tunnelsInit(line, anthill):
     # Creates a tunnel between two rooms
-    return
+    space = ""
+    print(space.isspace())
+
+    firstRoom = ""
+    secondRoom = ""
+    i = 0
+    while line[i] != '-':
+        if not line[i].isspace() or line[i] != '\n' or line[i] != "":
+            firstRoom += line[i]
+        else:
+            print("line[i] is a space")
+        print("character", i, ":", line[i])
+        i += 1
+    # We are at character '-'
+    i += 2
+    while line[i] != '\n':
+        if not line[i].isspace() or line[i] != '\n' or line[i] != "":
+            secondRoom += line[i]
+        else:
+            print("line[i] is a space")
+        print("character", i, ":", line[i])
+        i += 1
+
+    # if firstRoom in anthill.getArray() and secondRoom in anthill.getArray():
+    anthill.addTunnel(firstRoom, secondRoom)
 
 
 # 2 - initialisation de la fourmiliere
@@ -85,4 +108,4 @@ def tunnelsInit(line):
 anthill = Anthill.Anthill()
 fileParsing(anthill)
 
-anthill.printRooms()
+anthill.printAnthill()
