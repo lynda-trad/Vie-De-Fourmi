@@ -7,16 +7,37 @@ import Anthill
 
 # 1 - Lecture du fichier txt choisi pour determiner :
 # taille de la fourmiliere + nombre de salles en plus de Sd et Sv
+def getAntNumber(number, line):
+    for i in range(2, len(line)):
+        if line[i] != '\n':
+            number += line[i]
+        try:
+            n = int(number)
+        except ValueError:
+            print("Error, ant number \'f\' has to be a digit, please check the file again")
+            number = ""
+    return number
+
 
 def fileParsing(anthill):
-    filename = 'fourmiliere_quatre.txt'
+    filename = 'fourmiliere_cinq.txt'
     while not exists(filename):
         filename = input("Please enter a filename.\n")
 
     file = open(filename, "r")
     lines = file.readlines()
-    antNumber = lines.pop(0)  # line one is always the number of ants
-    print(antNumber)
+
+    antLine = lines.pop(0)  # line one is always the number of ants
+    antNumber = getAntNumber("", antLine)
+    if antNumber == "":   # Error : ant number is not a number
+        return
+    anthill.setAntNumber(int(antNumber))
+
+    # Add Sd and Sv rooms to Anthill Array
+    Sd = Room.Room("Sd", int(antNumber))
+    Sv = Room.Room("Sv", int(antNumber))
+    anthill.addRoom(Sd)
+    anthill.addRoom(Sv)
 
     for line in lines:
         # If line has a '-' it means its a line about tunnels between two rooms
@@ -33,10 +54,11 @@ def getRoomCapacity(capacity, line):
             for i in range(4, len(line)):
                 if line[i] != '}':
                     capacity += line[i]
-
-    if not capacity.isdigit():
-        print("Error, capacity has to be a digit, please check the file again, capacity will be default size 1")
-        capacity = ""
+        try:
+            n = int(capacity)
+        except ValueError:
+            print("Error, capacity has to be a digit, please check the file again, capacity will be default size 1")
+            capacity = ""
 
     return capacity
 
@@ -44,7 +66,6 @@ def getRoomCapacity(capacity, line):
 def roomInit(line):
     # Creates a room
     name = line[0] + line[1]
-    r = Room.Room(name, 1)
     capacity = getRoomCapacity("", line)
     if len(capacity) == 0:
         r = Room.Room(name, 1)
@@ -63,3 +84,5 @@ def tunnelsInit(line):
 
 anthill = Anthill.Anthill()
 fileParsing(anthill)
+
+anthill.printRooms()

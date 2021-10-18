@@ -19,5 +19,14 @@ class Anthill:
     def setAntNumber(self, number):
         self.antNumber = number
 
+    def getAntNumber(self):
+        return self.antNumber
+
     def addRoom(self, room):
         self.array.append(room)
+
+    def printRooms(self):
+        print("Anthill Room Array:")
+        print("Ant number :", self.getAntNumber())
+        for r in self.array:
+            r.printRoom()
