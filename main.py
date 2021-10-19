@@ -5,6 +5,7 @@ import numpy
 
 import Room
 import Anthill
+import Ant
 
 
 # 1 - Lecture du fichier txt choisi pour determiner :
@@ -21,6 +22,25 @@ def getAntNumber(number, line):
     return number
 
 
+def antNumberInit(lines, anthill):
+    antLine = lines.pop(0)  # line one is always the number of ants
+    antNumber = getAntNumber("", antLine)
+    if antNumber == "":  # Error : ant number is not a number
+        print("Error, ant number \'f\' has to be a digit, please check the file again")
+        return
+    anthill.setAntNumber(int(antNumber))
+    anthill.addAnts()
+    return antNumber
+
+
+def sd_sv_init(antNumber, anthill):
+    # Adds Sd and Sv rooms to Anthill Array
+    Sd = Room.Room("Sd", int(antNumber), 0)
+    Sv = Room.Room("Sv", int(antNumber), 1)
+    anthill.addRoom(Sd)
+    anthill.addRoom(Sv)
+
+
 def fileParsing(anthill):
     filename = 'fourmiliere_quatre.txt'
     while not exists("./ressources/" + filename):
@@ -29,17 +49,9 @@ def fileParsing(anthill):
     file = open("./ressources/" + filename, "r")
     lines = file.readlines()
 
-    antLine = lines.pop(0)  # line one is always the number of ants
-    antNumber = getAntNumber("", antLine)
-    if antNumber == "":  # Error : ant number is not a number
-        return
-    anthill.setAntNumber(int(antNumber))
+    antNumber = antNumberInit(lines, anthill)
 
-    # Adds Sd and Sv rooms to Anthill Array
-    Sd = Room.Room("Sd", int(antNumber), 0)
-    Sv = Room.Room("Sv", int(antNumber), 1)
-    anthill.addRoom(Sd)
-    anthill.addRoom(Sv)
+    sd_sv_init(antNumber, anthill)
     index = 2
 
     for line in lines:
@@ -49,6 +61,7 @@ def fileParsing(anthill):
         else:  # Room
             anthill.addRoom(roomInit(line, index))
             index += 1
+
     anthill.printAnthill()
     return initMatrix(anthill)
 
@@ -115,5 +128,9 @@ anthill = Anthill.Anthill()
 # Adjacency matrix
 matrix = fileParsing(anthill)
 
+# Debugging
 anthill.printAnthill()
 print(matrix)
+
+f_one = Ant.Ant("F1", "Sd")
+f_one.printAnt()

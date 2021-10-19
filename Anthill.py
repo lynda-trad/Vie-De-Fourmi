@@ -1,12 +1,14 @@
 import Room
+import Ant
 import numpy
 
 
 class Anthill:
     def __init__(self):
         self.antNumber = 0  # Number of ants
-        self.array = []  # [Sd, Sv, S1 ...] fill with Room objects
-        self.tunnel = []  # [(S1, Sd) , (S2, S3), ...]
+        self.array = []     # [Sd, Sv, S1 ...] filled with Room objects
+        self.tunnel = []    # [(S1, Sd) , (S2, S3), ...]
+        self.antArray = []  # [ F1, F2, ...] filled with Ant objects
 
     def getArray(self):
         return self.array
@@ -35,6 +37,11 @@ class Anthill:
     def addRoom(self, room):
         self.array.append(room)
 
+    def addAnts(self):
+        for i in range(self.antNumber):
+            name = "F" + str(i + 1)
+            self.antArray.append(Ant.Ant(name, "Sv"))
+
     def printRooms(self):
         print("Anthill Room Array:")
         for r in self.array:
@@ -47,6 +54,9 @@ class Anthill:
         print("Ant number :", self.getAntNumber())
         self.printRooms()
         self.printTunnels()
+        print("Ant list:")
+        for i in range(len(self.antArray)):
+            self.antArray[i].printAnt()
 
     def addTunnel(self, firstRoom, secondRoom):
         self.tunnel.append((firstRoom, secondRoom))

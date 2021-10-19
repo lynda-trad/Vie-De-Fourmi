@@ -1,8 +1,3 @@
-# Room of the anthill
-
-# Init of Sd and Sv
-
-
 class Room:
     def __init__(self, name, capacity, index):
         self.name = name
