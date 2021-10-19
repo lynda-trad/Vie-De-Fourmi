@@ -1,6 +1,8 @@
 # Fourmi
 from os.path import exists
 
+import numpy
+
 import Room
 import Anthill
 
@@ -34,17 +36,21 @@ def fileParsing(anthill):
     anthill.setAntNumber(int(antNumber))
 
     # Adds Sd and Sv rooms to Anthill Array
-    Sd = Room.Room("Sd", int(antNumber))
-    Sv = Room.Room("Sv", int(antNumber))
+    Sd = Room.Room("Sd", int(antNumber), 0)
+    Sv = Room.Room("Sv", int(antNumber), 1)
     anthill.addRoom(Sd)
     anthill.addRoom(Sv)
+    index = 2
 
     for line in lines:
         # Tunnel
         if '-' in line:
             tunnelsInit(line, anthill)
         else:  # Room
-            anthill.addRoom(roomInit(line))
+            anthill.addRoom(roomInit(line, index))
+            index += 1
+    anthill.printAnthill()
+    return initMatrice(anthill)
 
 
 def getRoomCapacity(capacity, line):
@@ -61,14 +67,14 @@ def getRoomCapacity(capacity, line):
     return capacity
 
 
-def roomInit(line):
+def roomInit(line, index):
     # Creates a room
     name = line[0] + line[1]
     capacity = getRoomCapacity("", line)
     if len(capacity) == 0:
-        r = Room.Room(name, 1)
+        r = Room.Room(name, 1, index)
     else:
-        r = Room.Room(name, int(capacity))
+        r = Room.Room(name, int(capacity), index)
     r.printRoom()
     return r
 
@@ -84,17 +90,27 @@ def tunnelsInit(line, anthill):
         secondRoom = words[2]
     except ValueError:
         print("Error, tunnel is not initialized correctly, please check the file again")
-    print("first room", firstRoom, "second room", secondRoom)
-    roomNames = []
-    for room in anthill.getArray():
-        roomNames.append(room.getName())
+    roomNames = anthill.getNames()
     if firstRoom in roomNames and secondRoom in roomNames:
         anthill.addTunnel(firstRoom, secondRoom)
+
+
+def initMatrice(anthill):
+    print("Length:", anthill.getLength())
+    matrice = numpy.zeros((anthill.getLength(), anthill.getLength()))
+    for tup in anthill.getTunnel():
+        room_zero = anthill.returnRoom(tup[0])
+        room_one = anthill.returnRoom(tup[1])
+        matrice[room_zero.getIndex()][room_one.getIndex()] = 1
+        matrice[room_one.getIndex()][room_zero.getIndex()] = 1
+        return matrice
 
 
 # 2 - initialisation de la fourmiliere
 
 anthill = Anthill.Anthill()
-fileParsing(anthill)
+# Adjacency matrix
+matrice = fileParsing(anthill)
 
 anthill.printAnthill()
+print(matrice)
