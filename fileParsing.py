@@ -35,6 +35,8 @@ def sd_sv_init(antNumber, anthill):
     # Adds Sd and Sv rooms to Anthill Array
     Sd = Room.Room("Sd", int(antNumber), 0)
     Sv = Room.Room("Sv", int(antNumber), 1)
+    Sd.setCapacityLeft(0)
+    Sv.setCapacityLeft(0)
     anthill.addRoom(Sd)
     anthill.addRoom(Sv)
 
@@ -117,5 +119,4 @@ def fileParsing(anthill):
             anthill.addRoom(room)
             index += 1
 
-    anthill.printAnthill()
     return initMatrix(anthill)

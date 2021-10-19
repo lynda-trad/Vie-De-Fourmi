@@ -53,7 +53,7 @@ class Anthill:
         self.tunnel.append((firstRoom, secondRoom))
 
     # Returns room object from room array when given its index
-    def returnRoomWithIndex(self, room, index):
+    def returnRoomWithIndex(self, index):
         for room in self.roomArray:
             if room.getIndex() == index:
                 return room
@@ -73,10 +73,13 @@ class Anthill:
     def printTunnels(self):
         print("Tunnels:", self.tunnel)
 
+    def printAntArray(self):
+        print("Ant list:")
+        for i in range(len(self.antArray)):
+            self.antArray[i].printAnt()
+
     def printAnthill(self):
         print("Ant number :", self.getAntNumber())
         self.printRooms()
         self.printTunnels()
-        print("Ant list:")
-        for i in range(len(self.antArray)):
-            self.antArray[i].printAnt()
+        self.printAntArray()

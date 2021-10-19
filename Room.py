@@ -22,15 +22,19 @@ class Room:
     def setMaxCapacity(self, c):
         self.maxCapacity = c
 
+    def setCapacityLeft(self, n):
+        self.capacityLeft = n
+
     # When an ant comes in = True, capacityLeft decreases, if False, capacityLeft increases
-    def setCapacityLeft(self, ant):
+    def antMovement(self, ant):
         if ant:
             if self.capacityLeft != 0:
                 self.capacityLeft -= 1
             else:
-                print("Error, the room can not fit anymore ants")
+                print("Error, the room can not fit anymore ants, capacityLeft == 0 ")
         else:
-            if self.maxCapacity >= self.capacityLeft + 1:
+            test = self.capacityLeft + 1
+            if self.maxCapacity >= test:
                 self.capacityLeft += 1
             else:
                 print("Error, the room can not fit more ants than maxCapacity")
@@ -43,4 +47,5 @@ class Room:
             return True
 
     def printRoom(self):
-        print("Name:", self.getName(), "Capacity:", self.getMaxCapacity(), "Index:", self.getIndex())
+        print("Name:", self.getName(), "Max Capacity:", self.getMaxCapacity())
+        print("Capacity Left", self.getCapacityLeft(), "Index:", self.getIndex())

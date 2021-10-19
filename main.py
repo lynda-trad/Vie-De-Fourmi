@@ -6,48 +6,56 @@ import Ant
 import fileParsing
 
 
-def printStep(stepId):
-    st = ""
-    st += "+++ E" + stepId + " +++"
-    # print only if there is a movement between rooms
-
-
-def moveToNextRoom(currentLocation, currentAnt, anthil, matrix):
-    for j in range(len(matrix[currentLocation])):
-        if matrix[currentLocation][j] == 1:
-            currentRoom = anthil.returnRoomWithIndex(currentLocation)
+def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
+    moved = False
+    currentRoom = anthil.returnRoomWithIndex(currentLocation)
+    for j in range(len(matrix)):
+        if matrix[currentLocation][j] == 1 and not moved:
             nextRoom = anthil.returnRoomWithIndex(j)
             if nextRoom.canEnter():
-                currentRoom.setCapacityLeft(False)
-                nextRoom.setCapacityLeft(True)
+                print("Before move")
+                print("Current Room")
+                currentRoom.printRoom()
+                print("Next Room")
+                nextRoom.printRoom()
+                currentRoom.antMovement(False)
+                nextRoom.antMovement(True)
+                print("\nAfter move")
+                print("Current Room")
+                currentRoom.printRoom()
+                print("Next Room")
+                nextRoom.printRoom()
                 currentAnt.setLocation(nextRoom)
+                step += currentAnt.getName() + " - "
+                step += currentRoom.getName() + " - "
+                step += nextRoom.getName() + "\n"
+                moved = True
+                print(step)
+                break
 
 
 def allInSd(anthil):
     allInSd = True
-    for f in range(anthil.getAntArray()):
+    for f in range(len(anthil.getAntArray())):
         if anthil.antArray[f].getLocation() != 1:
             allInSd = False
     return allInSd
 
 
-def travel(matrix, stepId, anthill):
-    # Etape numero stepIndex
-    # toutes les fourmis commencent à Sv = 1
-    # on regarde dans la matrice sur la ligne 1, la premiere case == 1
-    # on prend cet index et on deplace la fourmi la bas
-    # fourmi.setLocation = j
-    # on change capacity de room index j avec True
-    # on change capacity de room index i avec False
-    for f in range(anthill.getAntArray()):
-        currentAnt = anthill.antArray[f]
+def travel(matrix, stepId, anthil):
+    step = "+++ E" + str(stepId) + " +++\n"
+
+    for f in range(2, len(anthil.getAntArray())):
+        currentAnt = anthil.antArray[f]
         currentLocation = currentAnt.getLocation()
         if currentLocation != 1:  # if ant is not in Sd
-            moveToNextRoom(currentLocation, currentAnt, anthil, matrix)
+            cL = int(currentLocation)
+            moveToNextRoom(cL, currentAnt, anthil, matrix, step)
 
     stepId += 1
-    if not allInSd():
-        travel(matrix, stepId, anthill)
+    print(step)
+    if not allInSd(anthil):
+        travel(matrix, stepId, anthil)
     return
 
 
@@ -57,9 +65,8 @@ anthil = Anthill.Anthill()
 matrix = fileParsing.fileParsing(anthil)
 
 # Debugging
-anthil.printAnthill()
 print(matrix)
+#anthill.printAnthill()
 
 stepIndex = 1
-
 travel(matrix, stepIndex, anthil)
