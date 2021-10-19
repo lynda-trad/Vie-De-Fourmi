@@ -99,7 +99,7 @@ def initMatrix(anthill):
 
 # File parsing launcher
 def fileParsing(anthill):
-    filename = 'fourmiliere_quatre.txt'
+    filename = 'fourmiliere_un.txt'
     while not exists("./ressources/" + filename):
         filename = input("Please enter a filename.\n")
 
