@@ -4,9 +4,6 @@ class Room:
         self.capacity = capacity
         self.index = index
 
-    def setCapacity(self, c):
-        self.capacity = c
-
     def getCapacity(self):
         return self.capacity
 
@@ -15,6 +12,9 @@ class Room:
 
     def getIndex(self):
         return self.index
+
+    def setCapacity(self, c):
+        self.capacity = c
 
     def printRoom(self):
         print("Name:", self.getName(), "Capacity:", self.getCapacity(), "Index:", self.getIndex())

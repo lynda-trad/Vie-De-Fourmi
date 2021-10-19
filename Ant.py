@@ -3,14 +3,14 @@ class Ant:
         self.name = name
         self.location = location
 
-    def setLocation(self, room):
-        self.location = room
-
     def getName(self):
         return self.name
 
     def getLocation(self):
         return self.location
+
+    def setLocation(self, room):
+        self.location = room
 
     def printAnt(self):
         print("Ant :", self.getName())
