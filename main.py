@@ -76,31 +76,19 @@ def roomInit(line):
 
 def tunnelsInit(line, anthill):
     # Creates a tunnel between two rooms
-    space = ""
-    print(space.isspace())
-
     firstRoom = ""
     secondRoom = ""
-    i = 0
-    while line[i] != '-':
-        if not line[i].isspace() or line[i] != '\n' or line[i] != "":
-            firstRoom += line[i]
-        else:
-            print("line[i] is a space")
-        print("character", i, ":", line[i])
-        i += 1
-    # We are at character '-'
-    i += 2
-    while line[i] != '\n':
-        if not line[i].isspace() or line[i] != '\n' or line[i] != "":
-            secondRoom += line[i]
-        else:
-            print("line[i] is a space")
-        print("character", i, ":", line[i])
-        i += 1
-
-    # if firstRoom in anthill.getArray() and secondRoom in anthill.getArray():
-    anthill.addTunnel(firstRoom, secondRoom)
+    try:
+        words = line.split()
+        firstRoom = words[0]
+        # '-' = words[1]
+        secondRoom = words[2]
+    except ValueError:
+        print("Error, tunnel is not initialized correctly, please check the file again")
+    print("first room", firstRoom, "second room", secondRoom)
+    for room in anthill.getArray():
+        if firstRoom == room.getName() or secondRoom == room.getName():
+            anthill.addTunnel(firstRoom, secondRoom)
 
 
 # 2 - initialisation de la fourmiliere

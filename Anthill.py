@@ -6,7 +6,7 @@ class Anthill:
         self.array = []
         self.length = len(self.array)
         self.antNumber = 0
-        self.matrice =[]
+        self.matrice = []
 
     def getArray(self):
         return self.array
@@ -42,13 +42,6 @@ class Anthill:
 
     def addTunnel(self, firstRoom, secondRoom):
         self.matrice.append((firstRoom, secondRoom))
-
-
-
-
-
-
-
 
 # Tunnels
 # Sommets
