@@ -5,6 +5,7 @@ import Anthill
 import Ant
 
 
+# Parses line 0 to find ant number specified like this : f=10
 def getAntNumber(number, line):
     for i in range(2, len(line)):
         if line[i] != '\n':
@@ -17,6 +18,7 @@ def getAntNumber(number, line):
     return number
 
 
+# Initializes anthill's ant array with antNumber x Ant objects
 def antNumberInit(lines, anthill):
     antLine = lines.pop(0)  # line one is always the number of ants
     antNumber = getAntNumber("", antLine)
@@ -28,6 +30,7 @@ def antNumberInit(lines, anthill):
     return antNumber
 
 
+# Initializes Sd and Sv room objects in anthill room array
 def sd_sv_init(antNumber, anthill):
     # Adds Sd and Sv rooms to Anthill Array
     Sd = Room.Room("Sd", int(antNumber), 0)
@@ -36,6 +39,7 @@ def sd_sv_init(antNumber, anthill):
     anthill.addRoom(Sv)
 
 
+# Parses line to find if room capacity is specified like this S1 { 2 }
 def getRoomCapacity(capacity, line):
     if line[2] != '\n':
         if line[3] == '{':
@@ -50,6 +54,7 @@ def getRoomCapacity(capacity, line):
     return capacity
 
 
+# Creates a room object with parsed line
 def roomInit(line, index):
     # Creates a room
     name = line[0] + line[1]
@@ -58,12 +63,11 @@ def roomInit(line, index):
         r = Room.Room(name, 1, index)
     else:
         r = Room.Room(name, int(capacity), index)
-    r.printRoom()
     return r
 
 
+# Initializes Anthill's tunnels list like this [(S1, S2), (S2, S3), ...]
 def tunnelsInit(line, anthill):
-    # Creates a tunnel between two rooms
     firstRoom = ""
     secondRoom = ""
     try:
@@ -73,25 +77,25 @@ def tunnelsInit(line, anthill):
         secondRoom = words[2]
     except ValueError:
         print("Error, tunnel is not initialized correctly, please check the file again")
-    roomNames = anthill.getNames()
+    roomNames = anthill.getRoomNames()
     if firstRoom in roomNames and secondRoom in roomNames:
         anthill.addTunnel(firstRoom, secondRoom)
 
 
+# Initializes adjacency matrix in main.py with anthill's tunnels and room indexes
 def initMatrix(anthill):
-    print("\n MATRIX INIT \n")
     if anthill.getLength() == 0:
         print("Error, there are no rooms, so no matrix, please check file again")
         return
-    matrice = numpy.zeros((anthill.getLength(), anthill.getLength()))
+    matrix = numpy.zeros((anthill.getLength(), anthill.getLength()))
     for tup in anthill.getTunnel():
-        room_zero = anthill.returnRoom(tup[0])
-        room_one = anthill.returnRoom(tup[1])
-        matrice[room_zero.getIndex()][room_one.getIndex()] = 1
-        matrice[room_one.getIndex()][room_zero.getIndex()] = 1
-    return matrice
+        room_zero = anthill.returnRoomWithName(tup[0])
+        room_one = anthill.returnRoomWithName(tup[1])
+        matrix[room_zero.getIndex()][room_one.getIndex()] = 1
+    return matrix
 
 
+# File parsing launcher
 def fileParsing(anthill):
     filename = 'fourmiliere_quatre.txt'
     while not exists("./ressources/" + filename):
@@ -106,11 +110,11 @@ def fileParsing(anthill):
     index = 2
 
     for line in lines:
-        # Tunnel
-        if '-' in line:
+        if '-' in line:  # Tunnel
             tunnelsInit(line, anthill)
         else:  # Room
-            anthill.addRoom(roomInit(line, index))
+            room = roomInit(line, index)
+            anthill.addRoom(room)
             index += 1
 
     anthill.printAnthill()

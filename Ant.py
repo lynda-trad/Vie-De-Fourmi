@@ -9,8 +9,8 @@ class Ant:
     def getLocation(self):
         return self.location
 
-    def setLocation(self, room):
-        self.location = room
+    def setLocation(self, index):
+        self.location = index
 
     def printAnt(self):
         print("Ant :", self.getName())

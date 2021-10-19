@@ -11,7 +11,7 @@ class Anthill:
         self.antArray = []  # [ F1, F2, ...] filled with Ant objects
 
     # Returns array filled with room names
-    def getNames(self):
+    def getRoomNames(self):
         roomNames = []
         for room in self.getRoomArray():
             roomNames.append(room.getName())
@@ -19,6 +19,9 @@ class Anthill:
 
     def getRoomArray(self):
         return self.roomArray
+
+    def getAntArray(self):
+        return self.antArray
 
     def getLength(self):
         return len(self.roomArray)
@@ -35,19 +38,28 @@ class Anthill:
     def setAntNumber(self, number):
         self.antNumber = number
 
+    # Adds room object to room array
     def addRoom(self, room):
         self.roomArray.append(room)
 
+    # Adds ant object to ants list
     def addAnts(self):
         for i in range(self.antNumber):
             name = "F" + str(i + 1)
-            self.antArray.append(Ant.Ant(name, "Sv"))
+            self.antArray.append(Ant.Ant(name, "1"))
 
+    # Adds tuple of first and second room names to tunnel list
     def addTunnel(self, firstRoom, secondRoom):
         self.tunnel.append((firstRoom, secondRoom))
 
+    # Returns room object from room array when given its index
+    def returnRoomWithIndex(self, room, index):
+        for room in self.roomArray:
+            if room.getIndex() == index:
+                return room
+
     # Returns room object from room array when given its name
-    def returnRoom(self, name):
+    def returnRoomWithName(self, name):
         for room in self.roomArray:
             if room.getName() == name:
                 return room
