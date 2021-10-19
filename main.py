@@ -58,7 +58,6 @@ def getRoomCapacity(capacity, line):
         except ValueError:
             print("Error, capacity has to be a digit, please check the file again, capacity will be default size 1")
             capacity = ""
-
     return capacity
 
 
@@ -86,9 +85,11 @@ def tunnelsInit(line, anthill):
     except ValueError:
         print("Error, tunnel is not initialized correctly, please check the file again")
     print("first room", firstRoom, "second room", secondRoom)
+    roomNames = []
     for room in anthill.getArray():
-        if firstRoom == room.getName() or secondRoom == room.getName():
-            anthill.addTunnel(firstRoom, secondRoom)
+        roomNames.append(room.getName())
+    if firstRoom in roomNames and secondRoom in roomNames:
+        anthill.addTunnel(firstRoom, secondRoom)
 
 
 # 2 - initialisation de la fourmiliere
