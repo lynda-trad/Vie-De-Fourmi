@@ -50,7 +50,7 @@ def fileParsing(anthill):
             anthill.addRoom(roomInit(line, index))
             index += 1
     anthill.printAnthill()
-    return initMatrice(anthill)
+    return initMatrix(anthill)
 
 
 def getRoomCapacity(capacity, line):
@@ -95,22 +95,25 @@ def tunnelsInit(line, anthill):
         anthill.addTunnel(firstRoom, secondRoom)
 
 
-def initMatrice(anthill):
-    print("Length:", anthill.getLength())
+def initMatrix(anthill):
+    print("\n MATRIX INIT \n")
+    if anthill.getLength() == 0:
+        print("Error, there are no rooms, so no matrix, please check file again")
+        return
     matrice = numpy.zeros((anthill.getLength(), anthill.getLength()))
     for tup in anthill.getTunnel():
         room_zero = anthill.returnRoom(tup[0])
         room_one = anthill.returnRoom(tup[1])
         matrice[room_zero.getIndex()][room_one.getIndex()] = 1
         matrice[room_one.getIndex()][room_zero.getIndex()] = 1
-        return matrice
+    return matrice
 
 
 # 2 - initialisation de la fourmiliere
 
 anthill = Anthill.Anthill()
 # Adjacency matrix
-matrice = fileParsing(anthill)
+matrix = fileParsing(anthill)
 
 anthill.printAnthill()
-print(matrice)
+print(matrix)
