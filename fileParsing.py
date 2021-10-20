@@ -86,10 +86,15 @@ def tunnelsInit(line, anthill):
     secondRoom = ""
     try:
         idx1 = line.index("-")
-        idx2 = line.index("\n")
         for idx in range(0, idx1):
             if not line[idx].isspace():
                 firstRoom += str(line[idx])
+
+        if '\n' in line:
+            idx2 = line.index("\n")
+        else:
+            idx2 = len(line)
+
         for idx in range(idx1 + 1, idx2):
             if not line[idx].isspace():
                 secondRoom += str(line[idx])
