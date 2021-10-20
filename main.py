@@ -42,8 +42,6 @@ def travel(matrix, stepId, anthil):
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
         stepId += 1
-
-    print("Final result:\n", step)
     return step
 
 
@@ -53,12 +51,14 @@ anthil = Anthill.Anthill()
 matrix = fileParsing.fileParsing(anthil)
 
 # Debugging
-print(matrix)
+print("Adjacency matrix:\n", matrix)
 anthil.printAnthill()
 
 stepIndex = 1
 if len(matrix) != 0:
+    print("---Travel result ---\n")
     finalStep = travel(matrix, stepIndex, anthil)
-    print("finalstep test")
+    print(finalStep)
+    print("All the ants can sleep now !")
 else:
     print("matrix is not initialized correctly, please check the file again")

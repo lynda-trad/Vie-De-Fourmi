@@ -7,20 +7,24 @@ import Ant
 
 # Parses line 0 to find ant number specified like this : f=10
 def getAntNumber(number, line):
-    for i in range(2, len(line)):
-        if line[i] != '\n':
+    try:
+        idx1 = line.index("=")
+        idx2 = line.index("\n")
+        for i in range(idx1 + 1, idx2):
             number += line[i]
-        try:
-            n = int(number)
-        except ValueError:
-            print("Error, ant number \'f\' has to be a digit, please check the file again")
-            number = ""
+        n = int(number)
+    except ValueError:
+        print("Error, ant number \'f\' has to be a digit, please check the file again")
+        number = ""
     return number
 
 
 # Initializes anthill's ant array with antNumber x Ant objects
 def antNumberInit(lines, anthill):
     antLine = lines.pop(0)  # line one is always the number of ants
+    if '=' not in antLine:
+        print("Error, ant number is not specified like this f=3, please check the file again")
+        return
     antNumber = getAntNumber("", antLine)
     if antNumber == "":  # Error : ant number is not a number
         print("Error, ant number \'f\' has to be a digit, please check the file again")

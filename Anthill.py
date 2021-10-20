@@ -68,6 +68,7 @@ class Anthill:
     def printRooms(self):
         print("Anthill Room Array:")
         for r in self.roomArray:
+            print("---")
             r.printRoom()
 
     def printTunnels(self):
@@ -76,6 +77,7 @@ class Anthill:
     def printAntArray(self):
         print("Ant list:")
         for i in range(len(self.antArray)):
+            print("---")
             self.antArray[i].printAnt()
 
     def printAnthill(self):
