@@ -28,7 +28,6 @@ def allInSd(anthil):
     allInSd = True
     for f in range(len(anthil.getAntArray())):
         if anthil.antArray[f].getLocation() != 0:
-            anthil.antArray[f].printAnt()
             allInSd = False
     return allInSd
 
@@ -39,12 +38,10 @@ def travel(matrix, stepId, anthil):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthil.getAntArray())):
             currentAnt = anthil.antArray[f]
-            currentAnt.printAnt()
             currentLocation = currentAnt.getLocation()
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
         stepId += 1
-        print(step)
 
     print("Final result:\n", step)
     return step
@@ -57,12 +54,11 @@ matrix = fileParsing.fileParsing(anthil)
 
 # Debugging
 print(matrix)
-anthil.printAntArray()
 anthil.printAnthill()
 
 stepIndex = 1
 if len(matrix) != 0:
-    #finalStep = travel(matrix, stepIndex, anthil)
+    finalStep = travel(matrix, stepIndex, anthil)
     print("finalstep test")
 else:
     print("matrix is not initialized correctly, please check the file again")

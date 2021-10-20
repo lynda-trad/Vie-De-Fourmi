@@ -79,7 +79,11 @@ class Anthill:
             self.antArray[i].printAnt()
 
     def printAnthill(self):
-        print("Ant number :", self.getAntNumber())
+        print("\nAnt number :", self.getAntNumber())
+        print()
         self.printRooms()
+        print()
         self.printTunnels()
+        print()
         self.printAntArray()
+        print()
