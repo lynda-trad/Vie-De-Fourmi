@@ -35,7 +35,7 @@ def sd_sv_init(antNumber, anthill):
     # Adds Sd and Sv rooms to Anthill Array
     Sd = Room.Room("Sd", int(antNumber), 0)
     Sv = Room.Room("Sv", int(antNumber), 1)
-    Sd.setCapacityLeft(0)
+    Sd.setCapacityLeft(int(antNumber))
     Sv.setCapacityLeft(0)
     anthill.addRoom(Sd)
     anthill.addRoom(Sv)
@@ -43,15 +43,15 @@ def sd_sv_init(antNumber, anthill):
 
 # Parses line to find if room capacity is specified like this S1 { 2 }
 def getRoomCapacity(capacity, line):
-    if line[2] != '\n':
-        if line[3] == '{':
-            for i in range(4, len(line)):
-                if line[i] != '}':
-                    capacity += line[i]
+    if '{' in line:
         try:
+            idx1 = line.index("{")
+            idx2 = line.index("}")
+            for idx in range(idx1 + 2, idx2):
+                capacity += str(line[idx])
             n = int(capacity)
         except ValueError:
-            print("Error, capacity has to be a digit, please check the file again, capacity will be default size 1")
+            print("Error, capacity has to be digit, capacity will be default size 1, please check the file again")
             capacity = ""
     return capacity
 
@@ -99,9 +99,9 @@ def initMatrix(anthill):
 
 # File parsing launcher
 def fileParsing(anthill):
-    filename = 'fourmiliere_un.txt'
+    filename = input("Please enter a filename with txt extension from folder /ressources.\n")
     while not exists("./ressources/" + filename):
-        filename = input("Please enter a filename.\n")
+        filename = input("Please enter a valid filename.\n")
 
     file = open("./ressources/" + filename, "r")
     lines = file.readlines()
@@ -114,7 +114,7 @@ def fileParsing(anthill):
     for line in lines:
         if '-' in line:  # Tunnel
             tunnelsInit(line, anthill)
-        else:  # Room
+        else:            # Room
             room = roomInit(line, index)
             anthill.addRoom(room)
             index += 1
