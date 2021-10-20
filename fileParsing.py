@@ -59,7 +59,19 @@ def getRoomCapacity(capacity, line):
 # Creates a room object with parsed line
 def roomInit(line, index):
     # Creates a room
-    name = line[0] + line[1]
+    name = ""
+    try:
+        if "{" in line:
+            idx1 = line.index("{")
+        else:
+            idx1 = line.index("\n")
+
+        for idx in range(0, idx1):
+            if not line[idx].isspace():
+                name += str(line[idx])
+    except ValueError:
+        print("Error, room is not initialized correctly")
+
     capacity = getRoomCapacity("", line)
     if len(capacity) == 0:
         r = Room.Room(name, 1, index)
@@ -73,10 +85,17 @@ def tunnelsInit(line, anthill):
     firstRoom = ""
     secondRoom = ""
     try:
-        words = line.split()
-        firstRoom = words[0]
-        # '-' = words[1]
-        secondRoom = words[2]
+        idx1 = line.index("-")
+        idx2 = line.index("\n")
+        for idx in range(0, idx1):
+            if not line[idx].isspace():
+                firstRoom += str(line[idx])
+        for idx in range(idx1 + 1, idx2):
+            if not line[idx].isspace():
+                secondRoom += str(line[idx])
+        firstRoom.replace(" ", "")
+        secondRoom.replace(" ", "")
+        print(firstRoom, "-", secondRoom)
     except ValueError:
         print("Error, tunnel is not initialized correctly, please check the file again")
     roomNames = anthill.getRoomNames()

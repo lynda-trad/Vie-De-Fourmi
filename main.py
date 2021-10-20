@@ -13,21 +13,8 @@ def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
         if matrix[currentLocation][j] == 1 and not moved:
             nextRoom = anthil.returnRoomWithIndex(j)
             if nextRoom.canEnter():
-                print("\nBefore move")
-                print("Current Room")
-                currentRoom.printRoom()
-                print("Next Room")
-                nextRoom.printRoom()
-
                 currentRoom.antMovement(False)
                 nextRoom.antMovement(True)
-
-                print("\nAfter move")
-                print("Current Room")
-                currentRoom.printRoom()
-                print("Next Room")
-                nextRoom.printRoom()
-
                 currentAnt.setLocation(nextRoom.getIndex())
                 step += currentAnt.getName() + " - "
                 step += currentRoom.getName() + " - "
@@ -74,4 +61,8 @@ anthil.printAntArray()
 anthil.printAnthill()
 
 stepIndex = 1
-#finalStep = travel(matrix, stepIndex, anthil)
+if len(matrix) != 0:
+    #finalStep = travel(matrix, stepIndex, anthil)
+    print("finalstep test")
+else:
+    print("matrix is not initialized correctly, please check the file again")
