@@ -5,10 +5,10 @@ import numpy
 
 class Anthill:
     def __init__(self):
-        self.antNumber = 0  # Number of ants
-        self.roomArray = []     # [Sd, Sv, S1 ...] filled with Room objects
-        self.tunnel = []    # [(S1, Sd) , (S2, S3), ...]
-        self.antArray = []  # [ F1, F2, ...] filled with Ant objects
+        self.antNumber = 0   # Number of ants
+        self.roomArray = []  # [Sd, Sv, S1 ...] filled with Room objects
+        self.tunnel = []     # [(S1, Sd) , (S2, S3), ...]
+        self.antArray = []   # [ F1, F2, ...] filled with Ant objects
 
     # Returns array filled with room names
     def getRoomNames(self):

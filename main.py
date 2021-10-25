@@ -1,9 +1,11 @@
 from os.path import exists
-import numpy
-import Room
+
+import networkx as nx
+
 import Anthill
-import Ant
 import fileParsing
+import networkx as nx
+import matplotlib.pyplot
 
 
 def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
@@ -53,6 +55,22 @@ matrix = fileParsing.fileParsing(anthil)
 # Debugging
 print("Adjacency matrix:\n", matrix)
 anthil.printAnthill()
+
+# NetworkX Graph init
+G = nx.Graph()
+G.add_node('Sv')
+G.add_node('Sd')
+for node in anthil.getRoomArray():
+    name = node.getName()
+    G.add_node(name)
+for edge in anthil.getTunnel():
+    G.add_edge(edge[0], edge[1])
+
+# Printing NetworkX Graph init
+nx.draw(G, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
+print(G)
+# use function nex.annotate to put current number of ants above its cell
+
 
 stepIndex = 1
 if len(matrix) != 0:
