@@ -1,3 +1,4 @@
+import time
 from os.path import exists
 
 import networkx as nx
@@ -5,7 +6,7 @@ import networkx as nx
 import Anthill
 import fileParsing
 import networkx as nx
-import matplotlib.pyplot
+import matplotlib.pyplot as plt
 
 
 def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
@@ -34,17 +35,64 @@ def allInSd(anthil):
     return allInSd
 
 
-def travel(matrix, stepId, anthil):
+def travel(graph, nodePos, matrix, stepId, anthil):
     step = ""
+    printGraph(graph, nodePos, anthil)
     while not allInSd(anthil):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthil.getAntArray())):
             currentAnt = anthil.antArray[f]
             currentLocation = currentAnt.getLocation()
+
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
+            printGraph(graph, nodePos, anthil)
+
         stepId += 1
+
     return step
+
+
+# Init Graph with Networkx
+def initPrintingGraph(anthill):
+    graph = nx.Graph()
+    graph.add_node('Sv')
+    graph.add_node('Sd')
+    # Add nodes = rooms
+    for node in anthill.getRoomArray():
+        name = node.getName()
+        graph.add_node(name)
+    # Add edges = tunnels
+    for edge in anthill.getTunnel():
+        graph.add_edge(edge[0], edge[1])
+
+    nodePos = nx.spring_layout(graph)
+    return graph, nodePos
+
+
+# Printing NetworkX Graph
+def printGraph(graph, nodePos, anthil):
+    # figure = plt.figure(0)
+    figure = plt.gcf()
+    figure.canvas.manager.set_window_title('Anthill')
+    # figure.canvas.manager.window.move(0, 0)
+    # figure.canvas.manager.window.SetPosition((500, 500))
+    # figure.canvas.manager.window.setGeometry(50, 100, 640, 545)
+
+    nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
+    for room in anthil.getRoomArray():
+        room.printRoom()
+        currentName = room.getName()
+        currentCapacity = room.getMaxCapacity() - room.getCapacityLeft()
+        x, y = pos[currentName]
+        plt.text(x, y + 0.1, s=currentCapacity, bbox=dict(facecolor='red', alpha=0.5), horizontalalignment='center')
+
+    plt.savefig("anthill.png")
+    plt.draw()
+    plt.pause(2)
+    # plt.ion()
+    plt.clf()
+    plt.close('all')
 
 
 ###########################################################
@@ -57,25 +105,12 @@ print("Adjacency matrix:\n", matrix)
 anthil.printAnthill()
 
 # NetworkX Graph init
-G = nx.Graph()
-G.add_node('Sv')
-G.add_node('Sd')
-for node in anthil.getRoomArray():
-    name = node.getName()
-    G.add_node(name)
-for edge in anthil.getTunnel():
-    G.add_edge(edge[0], edge[1])
-
-# Printing NetworkX Graph init
-nx.draw(G, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
-print(G)
-# use function nex.annotate to put current number of ants above its cell
-
+G, pos = initPrintingGraph(anthil)
 
 stepIndex = 1
 if len(matrix) != 0:
     print("---Travel result ---\n")
-    finalStep = travel(matrix, stepIndex, anthil)
+    finalStep = travel(G, pos, matrix, stepIndex, anthil)
     print(finalStep)
     print("All the ants can sleep now !")
 else:
