@@ -51,7 +51,7 @@ def travel(graph, nodePos, matrix, stepId, anthil):
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
         printGraph(graph, nodePos, anthil)
         stepId += 1
-
+    time.sleep(5)
     return step
 
 
@@ -74,20 +74,9 @@ def initPrintingGraph(anthill):
 
 # Printing NetworkX Graph
 def printGraph(graph, nodePos, anthil):
-    """
-    figure = plt.figure(0)
-    win = tk.Tk()
-    win.geometry('1000x1000')
-    win.title('Anthill')
-    canvas = FigureCanvasTkAgg(figure, win)
-    canvas.set_window_title('Anthill')
-    """
     figure = plt.gcf()
-    # figure = plt.figure(frameon=True)
     figure.canvas.manager.set_window_title('Anthill')
-    # figure.canvas.manager.window.SetPosition((500, 500))
-    # figure.canvas.manager.window.move(0, 0)
-    # figure.canvas.manager.window.setGeometry(50, 100, 640, 545)
+    figure.canvas.manager.window.SetPosition = (500, 500)
 
     nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
     for room in anthil.getRoomArray():
@@ -97,21 +86,11 @@ def printGraph(graph, nodePos, anthil):
         x, y = pos[currentName]
         plt.text(x, y + 0.1, s=currentCapacity, bbox=dict(facecolor='red', alpha=0.5), horizontalalignment='center')
 
-    # plt.savefig("anthill.png")
+    plt.savefig("anthill.png")
     plt.draw()
-
-    """
-    # canvas.draw()
-    # canvas.get_tk_widget().pack()
-    """
-
     plt.pause(1)
     figure.clear()
     plt.clf()  # clear figure from the canvas
-    """
-    tk.mainloop()
-    """
-    plt.close('all')
 
 
 ###########################################################
