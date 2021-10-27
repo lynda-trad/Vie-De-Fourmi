@@ -1,11 +1,8 @@
 import time
 from os.path import exists
 
-import networkx as nx
 import tkinter as tk
-
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 import Anthill
 import fileParsing
 import networkx as nx
@@ -118,18 +115,22 @@ def printGraph(graph, nodePos, anthil, stepId):
 
 # Calculates the best path to go from Sv to Sd
 def bestTravel(matrix):
-    start = 0
+    startingPossibilities = []
+    pathPossibilities = []
     for i in range(len(matrix)):
         if matrix[i][0] == 1:
-            start = i
-    path = [start]
-    while start != 1:
-        for i in range(len(matrix)):
-            if matrix[i][start] == 1:
-                start = i
-                path.insert(0, i)
-    path.append(0)
-    return path
+            startingPossibilities.append(i)
+    for p in startingPossibilities:
+        start = p
+        path = [start]
+        while start != 1:
+            for i in range(len(matrix)):
+                if matrix[i][start] == 1:
+                    start = i
+                    path.insert(0, i)
+        path.append(0)
+        pathPossibilities.append(path)
+    return pathPossibilities
 
 
 ###########################################################
@@ -145,11 +146,11 @@ anthil.printAnthill()
 G, pos = initPrintingGraph(anthil)
 
 stepIndex = 1
-path = bestTravel(matrix)
-print("\n BEST PATH: ", path, "\n")
+paths = bestTravel(matrix)
+print("\n Possible path: ", paths, "\n")
 
 if len(matrix) != 0:
-    finalStep = travel(G, pos, matrix, stepIndex, anthil, path)
+    finalStep = travel(G, pos, matrix, stepIndex, anthil, paths)
     print("---Travel result ---\n")
     print(finalStep)
     print("All the ants can sleep now !")
