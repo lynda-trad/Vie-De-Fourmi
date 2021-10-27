@@ -61,7 +61,7 @@ def allInSd(anthil):
 # Ant travel
 def travel(graph, nodePos, matrix, stepId, anthil, path):
     step = ""
-    printGraph(graph, nodePos, anthil)
+    printGraph(graph, nodePos, anthil, stepId)
     while not allInSd(anthil):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthil.getAntArray())):
@@ -71,7 +71,7 @@ def travel(graph, nodePos, matrix, stepId, anthil, path):
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
                 # step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, path)
-        printGraph(graph, nodePos, anthil)
+        printGraph(graph, nodePos, anthil, stepId)
         stepId += 1
     time.sleep(5)
     return step
@@ -91,11 +91,13 @@ def initPrintingGraph(anthill):
         graph.add_edge(edge[0], edge[1])
 
     nodePos = nx.spring_layout(graph)
+    nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
+    plt.savefig("./steps/anthill.png")
     return graph, nodePos
 
 
 # Printing NetworkX Graph
-def printGraph(graph, nodePos, anthil):
+def printGraph(graph, nodePos, anthil, stepId):
     figure = plt.gcf()
     figure.canvas.manager.set_window_title('Anthill')
     figure.canvas.manager.window.SetPosition = (500, 500)
@@ -107,7 +109,7 @@ def printGraph(graph, nodePos, anthil):
         x, y = pos[currentName]
         plt.text(x, y + 0.1, s=currentCapacity, bbox=dict(facecolor='red', alpha=0.5), horizontalalignment='center')
 
-    plt.savefig("anthill.png")
+    plt.savefig("./steps/step"+str(stepId)+".png")
     plt.draw()
     plt.pause(1)
     figure.clear()
