@@ -30,6 +30,31 @@ def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
     return step
 
 
+def secondMoveToNextRoom(currentLocation, currentAnt, anthil, matrix, step, path):
+    moved = False
+    currentRoom = anthil.returnRoomWithIndex(currentLocation)
+    if currentLocation in path:
+        nextLocation = path.index(currentLocation) + 1
+
+        print()
+        print("currentLocation:", currentLocation)
+        print("next location:", nextLocation)
+        print()
+
+        nextRoom = anthil.returnRoomWithIndex(nextLocation)
+        if nextRoom.canEnter():
+            currentRoom.antMovement(False)
+            nextRoom.antMovement(True)
+            currentAnt.setLocation(nextRoom.getIndex())
+            step += currentAnt.getName() + " - "
+            step += currentRoom.getName() + " - "
+            step += nextRoom.getName() + "\n"
+            moved = True
+            return step
+    return step
+
+
+# Checks if all of the ants are in Sd
 def allInSd(anthil):
     allInSd = True
     for f in range(len(anthil.getAntArray())):
@@ -38,7 +63,8 @@ def allInSd(anthil):
     return allInSd
 
 
-def travel(graph, nodePos, matrix, stepId, anthil):
+# Ant travel
+def travel(graph, nodePos, matrix, stepId, anthil, path):
     step = ""
     printGraph(graph, nodePos, anthil)
     while not allInSd(anthil):
@@ -49,6 +75,7 @@ def travel(graph, nodePos, matrix, stepId, anthil):
 
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
+                # step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, matrix, step, path)
         printGraph(graph, nodePos, anthil)
         stepId += 1
     time.sleep(5)
@@ -80,7 +107,6 @@ def printGraph(graph, nodePos, anthil):
 
     nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
     for room in anthil.getRoomArray():
-        room.printRoom()
         currentName = room.getName()
         currentCapacity = room.getMaxCapacity() - room.getCapacityLeft()
         x, y = pos[currentName]
@@ -91,6 +117,22 @@ def printGraph(graph, nodePos, anthil):
     plt.pause(1)
     figure.clear()
     plt.clf()  # clear figure from the canvas
+
+
+# Calculates the best path to go from Sv to Sd
+def bestTravel(matrix):
+    start = 0
+    for i in range(len(matrix)):
+        if matrix[i][0] == 1:
+            start = i
+    path = [start]
+    while start != 1:
+        for i in range(len(matrix)):
+            if matrix[i][start] == 1:
+                start = i
+                path.insert(0, i)
+    path.append(0)
+    return path
 
 
 ###########################################################
@@ -106,9 +148,12 @@ anthil.printAnthill()
 G, pos = initPrintingGraph(anthil)
 
 stepIndex = 1
+path = bestTravel(matrix)
+print("\n BEST PATH: ", path, "\n")
+
 if len(matrix) != 0:
+    finalStep = travel(G, pos, matrix, stepIndex, anthil, path)
     print("---Travel result ---\n")
-    finalStep = travel(G, pos, matrix, stepIndex, anthil)
     print(finalStep)
     print("All the ants can sleep now !")
 else:
