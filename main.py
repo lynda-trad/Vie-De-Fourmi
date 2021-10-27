@@ -61,7 +61,7 @@ def allInSd(anthil):
 # Ant travel
 def travel(graph, nodePos, matrix, stepId, anthil, path):
     step = ""
-    printGraph(graph, nodePos, anthil, stepId)
+    printGraph(graph, nodePos, anthil, stepId - 1)
     while not allInSd(anthil):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthil.getAntArray())):
@@ -100,7 +100,7 @@ def initPrintingGraph(anthill):
 def printGraph(graph, nodePos, anthil, stepId):
     figure = plt.gcf()
     figure.canvas.manager.set_window_title('Anthill')
-    figure.canvas.manager.window.SetPosition = (500, 500)
+    figure.canvas.manager.window.SetPosition = (200, 200)
 
     nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
     for room in anthil.getRoomArray():
