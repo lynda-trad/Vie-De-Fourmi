@@ -30,17 +30,12 @@ def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
     return step
 
 
-def secondMoveToNextRoom(currentLocation, currentAnt, anthil, matrix, step, path):
+def secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, path):
     moved = False
-    currentRoom = anthil.returnRoomWithIndex(currentLocation)
-    if currentLocation in path:
-        nextLocation = path.index(currentLocation) + 1
+    currentRoom = anthil.returnRoomWithIndex(int(currentLocation))
 
-        print()
-        print("currentLocation:", currentLocation)
-        print("next location:", nextLocation)
-        print()
-
+    if int(currentLocation) in path and not moved:
+        nextLocation = path[path.index(int(currentLocation)) + 1]
         nextRoom = anthil.returnRoomWithIndex(nextLocation)
         if nextRoom.canEnter():
             currentRoom.antMovement(False)
@@ -75,7 +70,7 @@ def travel(graph, nodePos, matrix, stepId, anthil, path):
 
             if int(currentLocation) != 0:  # if ant is not in Sd
                 step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
-                # step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, matrix, step, path)
+                # step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, path)
         printGraph(graph, nodePos, anthil)
         stepId += 1
     time.sleep(5)
