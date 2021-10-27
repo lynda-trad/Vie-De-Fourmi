@@ -27,22 +27,23 @@ def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
     return step
 
 
-def secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, path):
+def secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, paths):
     moved = False
     currentRoom = anthil.returnRoomWithIndex(int(currentLocation))
 
-    if int(currentLocation) in path and not moved:
-        nextLocation = path[path.index(int(currentLocation)) + 1]
-        nextRoom = anthil.returnRoomWithIndex(nextLocation)
-        if nextRoom.canEnter():
-            currentRoom.antMovement(False)
-            nextRoom.antMovement(True)
-            currentAnt.setLocation(nextRoom.getIndex())
-            step += currentAnt.getName() + " - "
-            step += currentRoom.getName() + " - "
-            step += nextRoom.getName() + "\n"
-            moved = True
-            return step
+    for i in range(len(paths)):
+        if int(currentLocation) in paths[i] and not moved:
+            nextLocation = paths[i][paths[i].index(int(currentLocation)) + 1]
+            nextRoom = anthil.returnRoomWithIndex(nextLocation)
+            if nextRoom.canEnter():
+                currentRoom.antMovement(False)
+                nextRoom.antMovement(True)
+                currentAnt.setLocation(nextRoom.getIndex())
+                step += currentAnt.getName() + " - "
+                step += currentRoom.getName() + " - "
+                step += nextRoom.getName() + "\n"
+                moved = True
+                return step
     return step
 
 
@@ -66,8 +67,8 @@ def travel(graph, nodePos, matrix, stepId, anthil, path):
             currentLocation = currentAnt.getLocation()
 
             if int(currentLocation) != 0:  # if ant is not in Sd
-                step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
-                # step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, path)
+                # step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
+                step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, paths)
         printGraph(graph, nodePos, anthil, stepId)
         stepId += 1
     time.sleep(5)
