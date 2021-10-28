@@ -30,7 +30,7 @@ def allInSd(anthill):
     for f in range(len(anthill.getAntArray())):
         if anthill.antArray[f].getLocation() != 0:
             allInside = False
-    return allInSd
+    return allInside
 
 
 # Ant travel
@@ -42,7 +42,6 @@ def travel(graph, nodePos, stepId, anthill, paths):
         for f in range(len(anthill.getAntArray())):
             currentAnt = anthill.antArray[f]
             currentLocation = currentAnt.getLocation()
-
             if int(currentLocation) != 0:
                 step = moveToNextRoom(currentLocation, currentAnt, anthill, step, paths)
         graphPrinting.printGraph(graph, nodePos, anthill, stepId)
@@ -68,6 +67,7 @@ def bestTravel(matrix):
                     path.insert(0, i)
         path.append(0)
         pathPossibilities.append(path)
+    pathPossibilities.sort()
     return pathPossibilities
 
 
