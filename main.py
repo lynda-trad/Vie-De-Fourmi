@@ -9,32 +9,14 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-def moveToNextRoom(currentLocation, currentAnt, anthil, matrix, step):
+def moveToNextRoom(currentLocation, currentAnt, anthill, step, paths):
     moved = False
-    currentRoom = anthil.returnRoomWithIndex(currentLocation)
-    for j in range(len(matrix)):
-        if matrix[currentLocation][j] == 1 and not moved:
-            nextRoom = anthil.returnRoomWithIndex(j)
-            if nextRoom.canEnter():
-                currentRoom.antMovement(False)
-                nextRoom.antMovement(True)
-                currentAnt.setLocation(nextRoom.getIndex())
-                step += currentAnt.getName() + " - "
-                step += currentRoom.getName() + " - "
-                step += nextRoom.getName() + "\n"
-                moved = True
-                return step
-    return step
-
-
-def secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, paths):
-    moved = False
-    currentRoom = anthil.returnRoomWithIndex(int(currentLocation))
+    currentRoom = anthill.returnRoomWithIndex(int(currentLocation))
 
     for i in range(len(paths)):
         if int(currentLocation) in paths[i] and not moved:
             nextLocation = paths[i][paths[i].index(int(currentLocation)) + 1]
-            nextRoom = anthil.returnRoomWithIndex(nextLocation)
+            nextRoom = anthill.returnRoomWithIndex(nextLocation)
             if nextRoom.canEnter():
                 currentRoom.antMovement(False)
                 nextRoom.antMovement(True)
@@ -48,28 +30,27 @@ def secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, paths):
 
 
 # Checks if all of the ants are in Sd
-def allInSd(anthil):
+def allInSd(anthill):
     allInSd = True
-    for f in range(len(anthil.getAntArray())):
-        if anthil.antArray[f].getLocation() != 0:
+    for f in range(len(anthill.getAntArray())):
+        if anthill.antArray[f].getLocation() != 0:
             allInSd = False
     return allInSd
 
 
 # Ant travel
-def travel(graph, nodePos, matrix, stepId, anthil, path):
+def travel(graph, nodePos, stepId, anthill, paths):
     step = ""
-    printGraph(graph, nodePos, anthil, stepId - 1)
-    while not allInSd(anthil):
+    printGraph(graph, nodePos, anthill, stepId - 1)
+    while not allInSd(anthill):
         step += "+++ E" + str(stepId) + " +++\n"
-        for f in range(len(anthil.getAntArray())):
-            currentAnt = anthil.antArray[f]
+        for f in range(len(anthill.getAntArray())):
+            currentAnt = anthill.antArray[f]
             currentLocation = currentAnt.getLocation()
 
             if int(currentLocation) != 0:  # if ant is not in Sd
-                # step = moveToNextRoom(int(currentLocation), currentAnt, anthil, matrix, step)
-                step = secondMoveToNextRoom(currentLocation, currentAnt, anthil, step, paths)
-        printGraph(graph, nodePos, anthil, stepId)
+                step = moveToNextRoom(currentLocation, currentAnt, anthill, step, paths)
+        printGraph(graph, nodePos, anthill, stepId)
         stepId += 1
     time.sleep(5)
     return step
@@ -95,19 +76,19 @@ def initPrintingGraph(anthill):
 
 
 # Printing NetworkX Graph
-def printGraph(graph, nodePos, anthil, stepId):
+def printGraph(graph, nodePos, anthill, stepId):
     figure = plt.gcf()
     figure.canvas.manager.set_window_title('Anthill')
     figure.canvas.manager.window.SetPosition = (200, 200)
 
     nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
-    for room in anthil.getRoomArray():
+    for room in anthill.getRoomArray():
         currentName = room.getName()
         currentCapacity = room.getMaxCapacity() - room.getCapacityLeft()
         x, y = pos[currentName]
         plt.text(x, y + 0.1, s=currentCapacity, bbox=dict(facecolor='red', alpha=0.5), horizontalalignment='center')
 
-    plt.savefig("./steps/step"+str(stepId)+".png")
+    plt.savefig("./steps/step" + str(stepId) + ".png")
     plt.draw()
     plt.pause(1)
     figure.clear()
@@ -136,22 +117,20 @@ def bestTravel(matrix):
 
 ###########################################################
 anthil = Anthill.Anthill()
-# Adjacency matrix
-matrix = fileParsing.fileParsing(anthil)
 
-# Debugging
-print("Adjacency matrix:\n", matrix)
+adjacencyMatrix = fileParsing.fileParsing(anthil)
+print("Adjacency matrix:\n", adjacencyMatrix)
 anthil.printAnthill()
 
 # NetworkX Graph init
 G, pos = initPrintingGraph(anthil)
 
-stepIndex = 1
-paths = bestTravel(matrix)
-print("\n Possible path: ", paths, "\n")
+possiblePaths = bestTravel(adjacencyMatrix)
+print("\n Possible path: ", possiblePaths, "\n")
 
-if len(matrix) != 0:
-    finalStep = travel(G, pos, matrix, stepIndex, anthil, paths)
+stepIndex = 1
+if len(adjacencyMatrix) != 0:
+    finalStep = travel(G, pos, adjacencyMatrix, stepIndex, anthil, possiblePaths)
     print("---Travel result ---\n")
     print(finalStep)
     print("All the ants can sleep now !")
