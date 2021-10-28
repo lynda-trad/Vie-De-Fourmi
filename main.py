@@ -1,12 +1,7 @@
 import time
-from os.path import exists
-
-import tkinter as tk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import Anthill
 import fileParsing
-import networkx as nx
-import matplotlib.pyplot as plt
+import graphPrinting
 
 
 def moveToNextRoom(currentLocation, currentAnt, anthill, step, paths):
@@ -31,68 +26,29 @@ def moveToNextRoom(currentLocation, currentAnt, anthill, step, paths):
 
 # Checks if all of the ants are in Sd
 def allInSd(anthill):
-    allInSd = True
+    allInside = True
     for f in range(len(anthill.getAntArray())):
         if anthill.antArray[f].getLocation() != 0:
-            allInSd = False
+            allInside = False
     return allInSd
 
 
 # Ant travel
 def travel(graph, nodePos, stepId, anthill, paths):
     step = ""
-    printGraph(graph, nodePos, anthill, stepId - 1)
+    graphPrinting.printGraph(graph, nodePos, anthill, stepId - 1)
     while not allInSd(anthill):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthill.getAntArray())):
             currentAnt = anthill.antArray[f]
             currentLocation = currentAnt.getLocation()
 
-            if int(currentLocation) != 0:  # if ant is not in Sd
+            if int(currentLocation) != 0:
                 step = moveToNextRoom(currentLocation, currentAnt, anthill, step, paths)
-        printGraph(graph, nodePos, anthill, stepId)
+        graphPrinting.printGraph(graph, nodePos, anthill, stepId)
         stepId += 1
     time.sleep(5)
     return step
-
-
-# Init Graph with Networkx
-def initPrintingGraph(anthill):
-    graph = nx.Graph()
-    graph.add_node('Sv')
-    graph.add_node('Sd')
-    # Add nodes = rooms
-    for node in anthill.getRoomArray():
-        name = node.getName()
-        graph.add_node(name)
-    # Add edges = tunnels
-    for edge in anthill.getTunnel():
-        graph.add_edge(edge[0], edge[1])
-
-    nodePos = nx.spring_layout(graph)
-    nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
-    plt.savefig("./steps/anthill.png")
-    return graph, nodePos
-
-
-# Printing NetworkX Graph
-def printGraph(graph, nodePos, anthill, stepId):
-    figure = plt.gcf()
-    figure.canvas.manager.set_window_title('Anthill')
-    figure.canvas.manager.window.SetPosition = (200, 200)
-
-    nx.draw(graph, nodePos, with_labels=True, font_size=8, alpha=0.8, node_color="#A86CF3")
-    for room in anthill.getRoomArray():
-        currentName = room.getName()
-        currentCapacity = room.getMaxCapacity() - room.getCapacityLeft()
-        x, y = pos[currentName]
-        plt.text(x, y + 0.1, s=currentCapacity, bbox=dict(facecolor='red', alpha=0.5), horizontalalignment='center')
-
-    plt.savefig("./steps/step" + str(stepId) + ".png")
-    plt.draw()
-    plt.pause(1)
-    figure.clear()
-    plt.clf()  # clear figure from the canvas
 
 
 # Calculates the best path to go from Sv to Sd
@@ -123,14 +79,14 @@ print("Adjacency matrix:\n", adjacencyMatrix)
 anthil.printAnthill()
 
 # NetworkX Graph init
-G, pos = initPrintingGraph(anthil)
+G, pos = graphPrinting.initPrintingGraph(anthil)
 
 possiblePaths = bestTravel(adjacencyMatrix)
 print("\n Possible path: ", possiblePaths, "\n")
 
 stepIndex = 1
 if len(adjacencyMatrix) != 0:
-    finalStep = travel(G, pos, adjacencyMatrix, stepIndex, anthil, possiblePaths)
+    finalStep = travel(G, pos, stepIndex, anthil, possiblePaths)
     print("---Travel result ---\n")
     print(finalStep)
     print("All the ants can sleep now !")
