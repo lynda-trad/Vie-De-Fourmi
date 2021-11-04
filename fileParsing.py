@@ -1,8 +1,6 @@
 from os.path import exists
 import numpy
 import Room
-import Anthill
-import Ant
 
 
 # Parses line 0 to find ant number specified like this : f=10
