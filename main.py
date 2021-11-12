@@ -28,7 +28,8 @@ def moveToNextRoom(currentLocation, currentAnt, anthill, step, paths):
 def allInSd(anthill):
     allInside = True
     for f in range(len(anthill.getAntArray())):
-        if anthill.antArray[f].getLocation() != 0:
+        antArray = anthill.getAntArray()
+        if antArray[f].getLocation() != 0:
             allInside = False
     return allInside
 
@@ -40,7 +41,8 @@ def travel(graph, nodePos, stepId, anthill, paths):
     while not allInSd(anthill):
         step += "+++ E" + str(stepId) + " +++\n"
         for f in range(len(anthill.getAntArray())):
-            currentAnt = anthill.antArray[f]
+            antArray = anthill.getAntArray()
+            currentAnt = antArray[f]
             currentLocation = currentAnt.getLocation()
             if int(currentLocation) != 0:
                 step = moveToNextRoom(currentLocation, currentAnt, anthill, step, paths)

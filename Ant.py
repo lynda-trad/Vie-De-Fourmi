@@ -1,16 +1,16 @@
 class Ant:
     def __init__(self, name, location):
-        self.name = name
-        self.location = location
+        self._name = name
+        self._location = location
 
     def getName(self):
-        return self.name
+        return self._name
 
     def getLocation(self):
-        return self.location
+        return self._location
 
     def setLocation(self, index):
-        self.location = index
+        self._location = index
 
     def printAnt(self):
         print("Ant :", self.getName())
